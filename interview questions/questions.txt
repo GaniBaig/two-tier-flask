@@ -1307,7 +1307,7 @@ pipeline{
     stages{
         stage('Clone repo'){
             steps{
-                git branch: 'main', url: 'https://github.com/prashantgohel321/DevOps-Project-Two-Tier-Flask-App.git'
+                git branch: 'main', url: 'https://github.com/GaniBaig/two-tier-flask.git'
             }
         }
         stage('Build image'){
@@ -1398,7 +1398,7 @@ pipeline {
                 script {
                     try {
                         git branch: 'main', 
-                            url: 'https://github.com/prashantgohel321/DevOps-Project-Two-Tier-Flask-App.git',
+                            url: 'https://github.com/GaniBaig/two-tier-flask.git',
                             credentialsId: 'github-credentials'
                         
                         // Get commit info for tracking

@@ -1,6 +1,7 @@
 # 🚀 Local Setup Guide - Flask Two-Tier App on Mac with Podman
 
 ## 📋 Table of Contents
+
 1. [Prerequisites](#prerequisites)
 2. [Install Podman on Mac](#install-podman-on-mac)
 3. [Setup Project Locally](#setup-project-locally)
@@ -14,6 +15,7 @@
 ## ✅ Prerequisites
 
 Before starting, make sure you have:
+
 - macOS (you're on a Mac)
 - Homebrew installed
 - Terminal access
@@ -47,6 +49,7 @@ podman --version
 ```
 
 **Expected output:**
+
 ```
 podman version 4.x.x
 ```
@@ -67,6 +70,7 @@ podman machine list
 ```
 
 **Expected output:**
+
 ```
 NAME                     VM TYPE     CREATED      LAST UP            CPUS        MEMORY      DISK SIZE
 podman-machine-default*  qemu        2 hours ago  Currently running  2           2GiB        100GiB
@@ -98,6 +102,7 @@ ls -la
 ```
 
 **You should see:**
+
 ```
 app.py
 docker-compose.yml
@@ -193,6 +198,7 @@ def health():\
 ### 3.1 Understanding the Setup
 
 Your application has two components:
+
 1. **MySQL Database** - Stores messages
 2. **Flask Application** - Web interface
 
@@ -209,6 +215,7 @@ podman-compose up -d
 ```
 
 **What happens:**
+
 ```
 Creating network two-tier_two-tier-nt
 Creating volume two-tier_mysql_data
@@ -233,6 +240,7 @@ podman-compose logs flask-app
 ```
 
 **Wait until you see:**
+
 ```
 mysql      | ready for connections
 flask-app  | * Running on http://0.0.0.0:5000
@@ -251,6 +259,7 @@ podman-compose ps
 ```
 
 **Expected output:**
+
 ```
 NAME            IMAGE                    STATUS          PORTS
 mysql           docker.io/library/mysql  Up 2 minutes    0.0.0.0:3306->3306/tcp
@@ -274,12 +283,14 @@ curl http://localhost:5000/health
 ### 4.2 Access the Application
 
 **Open your web browser and go to:**
+
 ```
 http://localhost:5000
 ```
 
 **You should see:**
-- A web page with "Prashant Gohil | DevOps Enthusiast"
+
+- A web page with "Mirza Abdul Gani Baig | DevOps Enthusiast"
 - A message input box
 - Any previously submitted messages
 
@@ -382,6 +393,7 @@ podman-compose up -d --build
 **Error:** `Error: address already in use`
 
 **Solution:**
+
 ```bash
 # Check what's using port 5000
 lsof -i :5000
@@ -398,6 +410,7 @@ kill -9 <PID>
 **Error:** `Can't connect to MySQL server`
 
 **Solution:**
+
 ```bash
 # Check MySQL logs
 podman-compose logs mysql
@@ -412,6 +425,7 @@ podman inspect mysql | grep -A 10 Health
 **Error:** `Cannot connect to Podman`
 
 **Solution:**
+
 ```bash
 # Check machine status
 podman machine list
@@ -429,6 +443,7 @@ podman machine start
 **Error:** `Error building image`
 
 **Solution:**
+
 ```bash
 # Check Dockerfile syntax
 cat Dockerfile
@@ -445,6 +460,7 @@ ls -la requirement.txt app.py templates/
 **Error:** `Unhealthy container`
 
 **Solution:**
+
 ```bash
 # Check if health endpoint exists
 curl http://localhost:5000/health
@@ -461,6 +477,7 @@ podman-compose logs flask-app
 **Problem:** Messages disappear after restart
 
 **Solution:**
+
 ```bash
 # Make sure you're NOT using -v flag
 podman-compose down    # Good - keeps data
@@ -550,18 +567,21 @@ podman-compose up -d --scale flask-app=3
 Now that your app works locally, you can follow the README.md to deploy on AWS:
 
 ### Phase 1: Local Development (✅ DONE!)
+
 - ✅ Install Podman
 - ✅ Run app locally
 - ✅ Test functionality
 - ✅ Understand the architecture
 
 ### Phase 2: AWS Preparation (Next)
+
 1. **Create AWS Account** (if you don't have one)
 2. **Launch EC2 Instance** (Ubuntu 22.04)
 3. **Configure Security Groups** (ports 22, 80, 5000, 8080)
 4. **SSH into EC2 instance**
 
 ### Phase 3: Install Dependencies on EC2
+
 ```bash
 # On EC2 instance
 sudo apt update && sudo apt upgrade -y
@@ -572,6 +592,7 @@ sudo usermod -aG docker ubuntu
 ```
 
 ### Phase 4: Deploy Application on EC2
+
 ```bash
 # Clone your repository
 git clone <your-repo-url>
@@ -584,6 +605,7 @@ docker compose up -d
 ```
 
 ### Phase 5: Setup Jenkins CI/CD
+
 Follow the README.md steps 3-5 for Jenkins setup.
 
 ---
@@ -637,28 +659,28 @@ By completing this local setup, you now understand:
 ## 💡 Pro Tips
 
 1. **Always check logs** when something doesn't work:
+   
    ```bash
    podman-compose logs -f
    ```
-
 2. **Use health checks** to ensure services are ready:
+   
    ```bash
    curl http://localhost:5000/health
    ```
-
 3. **Backup your data** before cleaning up:
+   
    ```bash
    podman exec mysql mysqldump -uroot -proot devops > backup.sql
    ```
-
 4. **Test locally first** before deploying to AWS - it's free and faster!
-
 5. **Keep your Podman machine running** for better performance:
+   
    ```bash
    podman machine list
    ```
-
 6. **Monitor resource usage**:
+   
    ```bash
    podman stats
    ```
@@ -684,3 +706,5 @@ You've successfully set up and run the Flask Two-Tier application locally on you
 **Next:** Follow the README.md to deploy this same application on AWS EC2 with Jenkins CI/CD pipeline.
 
 Good luck with your DevOps journey! 🚀
+
+
