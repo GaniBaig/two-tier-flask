@@ -1,0 +1,40 @@
+ Created wheel for mysqlclient: filename=mysqlclient-2.2.7-cp39-cp39-linux_aarch64.whl size=135671 sha256=420bc4ad4c6f573c06a7663d8cd48a7bdc939256ee267516519876acca0019c1
+  Stored in directory: /tmp/pip-ephem-wheel-cache-k_dxeo7p/wheels/ed/03/da/e61775175405d4b30c644467a6d377a98fd5a5da1bf5364614
+Successfully built Flask-MySQLdb mysqlclient
+Installing collected packages: urllib3, mysqlclient, MarkupSafe, itsdangerous, idna, click, charset-normalizer, certifi, Werkzeug, requests, Jinja2, Flask, Flask-MySQLdb
+Successfully installed Flask-2.0.1 Flask-MySQLdb-0.2.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-2.2.2 certifi-2026.4.22 charset-normalizer-2.0.12 click-8.1.8 idna-3.15 itsdangerous-2.2.0 mysqlclient-2.2.7 requests-2.26.0 urllib3-1.26.20
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.0.1 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip
+--> 147bac1dfc01
+STEP 6/8: COPY . .
+--> 97e3cc456036
+STEP 7/8: EXPOSE 5000
+--> bccbd0c61b38
+STEP 8/8: CMD ["python", "app.py"]
+COMMIT devops-project-two-tier-flask-app_flask-app
+--> 0e2cd569e04a
+Successfully tagged localhost/devops-project-two-tier-flask-app_flask-app:latest
+0e2cd569e04adbeaee90f08d937fa8763c293d1d899845664ee08ba9e69e824e
+15df41aa434dad04f804ae300db0f53fa518afa5ddd50e5492435dacef9c7fe9
+Resolving "mysql" using unqualified-search registries (/etc/containers/registries.conf.d/999-podman-machine.conf)
+Trying to pull docker.io/library/mysql:latest...
+Getting image source signatures
+Copying blob sha256:5a09fca0124b6e763de7d85a381b7e5ab5c028dcbf7e47df6719d872c3e999ce
+Copying blob sha256:0a13c12c93c1399fb49243c2d736f3021a86ab63049779d5b329c5b5debe26ac
+Copying blob sha256:000edcaa94f8b608f347845846057365cafc2769493dbb0d0ece60231b3e2483
+Copying blob sha256:f3c5770eff9743e9b59443e5782ce6752f077951ba2c212fedb97b42a7643b8e
+Copying blob sha256:40919faf9eb7be83c84762fe6d5bfccf3e7a7520cf7d23c7b1275849b60ca390
+Copying blob sha256:6a2ad1ff17eb84f3ca0d7dff6f31f2455a5d7753b3fdfe740fe556711266d009
+Copying blob sha256:6591e9dc619234c335d80dc5705e98d22e08780a552529d065bddca540b95759
+Copying blob sha256:e16a7551afaf58087d3dcdee63ad5c33e5a62afc507df9752b5b54360edc0339
+Copying blob sha256:c7e993edb915c5fcbb320984ce5df53244f586c8fe255dfccf17e3726d1ac4ef
+Copying blob sha256:98a0c748a764489dceb7f2e274c98312f1a3ffb8e7b07fd7b9a2cf72e6aeb579
+Copying config sha256:8be7203987a324be0eeb97d28eb127622fb048ae8980c170049c80d55b9928ba
+Writing manifest to image destination
+6e9860831d7e29e2a386b1d500a68b76db95371ea8d023f6a34c8a79c4b69c40
+a3370b699eb8d53474a4934513bc51e04ac8b4c25a3fe2cc2752c752ceac6164
+mysql
+Error: unable to start container "a3370b699eb8d53474a4934513bc51e04ac8b4c25a3fe2cc2752c752ceac6164": something went wrong with the request: "listen tcp :5000: bind: address already in use\n"
+mirzaabdulganibaig@MacBookPro DevOps-Project-Two-Tier-Flask-App % 
