@@ -99,12 +99,84 @@
             text-align: left;
         }
 
-        .messages p {
+        .message-item {
             padding: 8px;
             background: rgba(255, 255, 255, 0.07);
             border-radius: 8px;
             margin-bottom: 6px;
             font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .message-text {
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 4px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #FFA500;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #FF8C00;
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background: #FF4444;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #CC0000;
+            transform: scale(1.05);
+        }
+
+        .btn-save {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #218838;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+
+        .edit-input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #5599FF;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
 
         input[type="text"] {
@@ -183,9 +255,15 @@
                 </p>
             </div>
 
-            <div class="messages">
+            <div class="messages" id="messagesList">
                 {% for message in messages %}
-                    <p>{{ message[0] }}</p>
+                    <div class="message-item" data-id="{{ message[0] }}">
+                        <span class="message-text">{{ message[1] }}</span>
+                        <div class="message-actions">
+                            <button class="btn btn-edit" onclick="editMessage({{ message[0] }}, '{{ message[1] }}')">Edit</button>
+                            <button class="btn btn-delete" onclick="deleteMessage({{ message[0] }})">Delete</button>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
 
@@ -215,7 +293,16 @@
                     data: { new_message: message },
                     success: function(response) {
                         if (response && response.message) {
-                            $(".messages").append("<p>" + response.message + "</p>");
+                            let newMessage = `
+                                <div class="message-item" data-id="${response.id}">
+                                    <span class="message-text">${response.message}</span>
+                                    <div class="message-actions">
+                                        <button class="btn btn-edit" onclick="editMessage(${response.id}, '${response.message}')">Edit</button>
+                                        <button class="btn btn-delete" onclick="deleteMessage(${response.id})">Delete</button>
+                                    </div>
+                                </div>
+                            `;
+                            $("#messagesList").append(newMessage);
                             messageInput.val("");
                         }
                     },
@@ -225,6 +312,83 @@
                 });
             });
         });
+
+        function editMessage(id, currentMessage) {
+            let messageItem = $(`.message-item[data-id="${id}"]`);
+            let escapedMessage = currentMessage.replace(/'/g, "\\'");
+            
+            messageItem.html(`
+                <input type="text" class="edit-input" value="${currentMessage}" id="edit-input-${id}">
+                <div class="message-actions">
+                    <button class="btn btn-save" onclick="saveMessage(${id})">Save</button>
+                    <button class="btn btn-cancel" onclick="cancelEdit(${id}, '${escapedMessage}')">Cancel</button>
+                </div>
+            `);
+            $(`#edit-input-${id}`).focus();
+        }
+
+        function saveMessage(id) {
+            let newMessage = $(`#edit-input-${id}`).val().trim();
+            
+            if (newMessage === "") {
+                alert("Message cannot be empty!");
+                return;
+            }
+
+            $.ajax({
+                url: `/update/${id}`,
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify({ message: newMessage }),
+                success: function(response) {
+                    let escapedMessage = response.message.replace(/'/g, "\\'");
+                    $(`.message-item[data-id="${id}"]`).html(`
+                        <span class="message-text">${response.message}</span>
+                        <div class="message-actions">
+                            <button class="btn btn-edit" onclick="editMessage(${id}, '${escapedMessage}')">Edit</button>
+                            <button class="btn btn-delete" onclick="deleteMessage(${id})">Delete</button>
+                        </div>
+                    `);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Update Error:", status, error);
+                    alert("Failed to update message!");
+                }
+            });
+        }
+
+        function cancelEdit(id, originalMessage) {
+            let escapedMessage = originalMessage.replace(/'/g, "\\'");
+            $(`.message-item[data-id="${id}"]`).html(`
+                <span class="message-text">${originalMessage}</span>
+                <div class="message-actions">
+                    <button class="btn btn-edit" onclick="editMessage(${id}, '${escapedMessage}')">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteMessage(${id})">Delete</button>
+                </div>
+            `);
+        }
+
+        function deleteMessage(id) {
+            if (!confirm("Are you sure you want to delete this message?")) {
+                return;
+            }
+
+            $.ajax({
+                url: `/delete/${id}`,
+                type: "DELETE",
+                success: function(response) {
+                    if (response.success) {
+                        $(`.message-item[data-id="${id}"]`).fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Delete Error:", status, error);
+                    alert("Failed to delete message!");
+                }
+            });
+        }
     </script>
 </body>
 </html>

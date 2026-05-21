@@ -28,7 +28,7 @@ def init_db():
 @app.route('/')
 def hello():
     cur = mysql.connection.cursor()
-    cur.execute('SELECT message FROM messages')
+    cur.execute('SELECT id, message FROM messages')
     messages = cur.fetchall()
     cur.close()
     return render_template('index.html', messages=messages)
@@ -39,8 +39,26 @@ def submit():
     cur = mysql.connection.cursor()
     cur.execute('INSERT INTO messages (message) VALUES (%s)', [new_message])
     mysql.connection.commit()
+    message_id = cur.lastrowid
     cur.close()
-    return jsonify({'message': new_message})
+    return jsonify({'id': message_id, 'message': new_message})
+
+@app.route('/update/<int:message_id>', methods=['PUT'])
+def update(message_id):
+    updated_message = request.json.get('message')
+    cur = mysql.connection.cursor()
+    cur.execute('UPDATE messages SET message = %s WHERE id = %s', [updated_message, message_id])
+    mysql.connection.commit()
+    cur.close()
+    return jsonify({'id': message_id, 'message': updated_message})
+
+@app.route('/delete/<int:message_id>', methods=['DELETE'])
+def delete(message_id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM messages WHERE id = %s', [message_id])
+    mysql.connection.commit()
+    cur.close()
+    return jsonify({'success': True, 'id': message_id})
 
 @app.route('/health')
 def health():
