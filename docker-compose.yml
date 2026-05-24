@@ -3,7 +3,9 @@ version: "3.8"
 services:
   mysql:
     container_name: mysql
-    image: mysql
+    # Use MySQL 8.0-oracle (lighter than latest)
+    # mysql:latest = ~600MB, mysql:8.0-oracle = ~450MB (25% smaller!)
+    image: mysql:8.0-oracle
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "devops"

@@ -1,0 +1,41 @@
+ubuntu@ip-172-31-44-198:~$ df -h
+Filesystem       Size  Used Avail Use% Mounted on
+/dev/root        6.7G  5.6G  1.1G  85% /
+tmpfs            455M     0  455M   0% /dev/shm
+tmpfs            182M  960K  181M   1% /run
+efivarfs         128K  3.1K  120K   3% /sys/firmware/efi/efivars
+tmpfs            2.0G   52M  2.0G   3% /tmp
+none             1.0M     0  1.0M   0% /run/credentials/systemd-journald.service
+/dev/nvme0n1p13  989M   95M  828M  11% /boot
+/dev/nvme0n1p15  105M  6.3M   99M   7% /boot/efi
+none             1.0M     0  1.0M   0% /run/credentials/systemd-networkd.service
+none             1.0M     0  1.0M   0% /run/credentials/getty@tty1.service
+none             1.0M     0  1.0M   0% /run/credentials/serial-getty@ttyS0.service
+none             1.0M     0  1.0M   0% /run/credentials/systemd-resolved.service
+tmpfs             91M  8.0K   91M   1% /run/user/1000
+ubuntu@ip-172-31-44-198:~$ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          2         0         559.8MB   93.14MB (16%)
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B
+ubuntu@ip-172-31-44-198:~$ sudo du -h --max-depth=1 / 2>/dev/null | sort -hr | head -20
+6.4G	/
+3.2G	/usr
+1.4G	/var
+658M	/snap
+101M	/boot
+52M	/tmp
+8.4M	/etc
+968K	/run
+84K	/home
+52K	/root
+16K	/opt
+16K	/lost+found
+4.0K	/srv
+4.0K	/mnt
+4.0K	/media
+0	/sys
+0	/proc
+0	/dev
+ubuntu@ip-172-31-44-198:~$ 
