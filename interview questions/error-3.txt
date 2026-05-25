@@ -1,0 +1,376 @@
+Skip to content
+
+Jenkins
+two-tier-flask-app-deploy
+#8
+Search
+Manage Jenkins
+Mirza Abdul Gani Baig
+Status
+Changes
+Console Output
+Edit Build Information
+Timings
+Git Build Data
+Pipeline Overview
+Thread Dump
+Pause/resume
+Replay
+Pipeline Steps
+Workspaces
+Previous Build
+Console
+Download
+
+Copy
+View as plain text
+Started by user Mirza Abdul Gani Baig
+Obtained Jenkinsfile from git https://github.com/GaniBaig/two-tier-flask.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/two-tier-flask-app-deploy
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential a1568e22-fb7a-4d54-8ad3-07d90f41de13
+Cloning the remote Git repository
+Cloning repository https://github.com/GaniBaig/two-tier-flask.git
+ > git init /var/lib/jenkins/workspace/two-tier-flask-app-deploy # timeout=10
+Fetching upstream changes from https://github.com/GaniBaig/two-tier-flask.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+using GIT_ASKPASS to set credentials 
+ > git fetch --tags --force --progress -- https://github.com/GaniBaig/two-tier-flask.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/GaniBaig/two-tier-flask.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision a62f7a8bfd89260f4b805d3528b7e6db0e84bd92 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f a62f7a8bfd89260f4b805d3528b7e6db0e84bd92 # timeout=10
+Commit message: "optimise-2"
+ > git rev-list --no-walk a62f7a8bfd89260f4b805d3528b7e6db0e84bd92 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Pre-Build Cleanup)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🧹 Cleaning up before build...
+[Pipeline] sh
++ docker system prune -f
+Deleted Containers:
+26a84b7707bc7c6687ce4f7a4caa53558d369d102a8cf4cbb5c3cfc0054e29c9
+
+Deleted build cache objects:
+3o5wc50sa2r889y5fufmflzkq
+3lohv9yi4495gtcmx431spbbi
+v82qom6x42bx1nc2xamle1vez
+zg8n2g5agf66a755is08h4tn3
+hwbfks2js5m2aw2lwrn8v3lsc
+tsk9whjdrg92sxly695w1elml
+i1adzzk17qoyp2ytfpp25pvhw
+hjrhntt5muhtdeos9o1ix2end
+
+Total reclaimed space: 356.3MB
+[Pipeline] sh
++ df -h
++ grep -E Filesystem|/dev/root
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        19G  8.1G   11G  45% /
+[Pipeline] sh
++ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          4         1         2.098GB   1.341GB (63%)
+Containers      1         1         32.77kB   0B (0%)
+Local Volumes   1         1         210.3MB   0B (0%)
+Build Cache     9         0         238.9MB   0B
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Clone Repository)
+[Pipeline] echo
+📥 Cloning repository...
+[Pipeline] git
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/two-tier-flask-app-deploy/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/GaniBaig/two-tier-flask.git # timeout=10
+Fetching upstream changes from https://github.com/GaniBaig/two-tier-flask.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+ > git fetch --tags --force --progress -- https://github.com/GaniBaig/two-tier-flask.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision a62f7a8bfd89260f4b805d3528b7e6db0e84bd92 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f a62f7a8bfd89260f4b805d3528b7e6db0e84bd92 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git checkout -b main a62f7a8bfd89260f4b805d3528b7e6db0e84bd92 # timeout=10
+Commit message: "optimise-2"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Application)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🚀 Deploying application with Docker Compose...
+[Pipeline] sh
++ docker compose down
+time="2026-05-25T11:10:36Z" level=warning msg="/var/lib/jenkins/workspace/two-tier-flask-app-deploy/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[Pipeline] sh
++ docker compose up -d --build
+time="2026-05-25T11:10:37Z" level=warning msg="/var/lib/jenkins/workspace/two-tier-flask-app-deploy/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+time="2026-05-25T11:10:37Z" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+#0 building with "default" instance using docker driver
+
+#1 [flask-app internal] load build definition from Dockerfile
+#1 transferring dockerfile: 726B 0.0s done
+#1 DONE 0.1s
+
+#2 [flask-app internal] load metadata for docker.io/library/python:3.9-alpine
+#2 DONE 0.0s
+
+#3 [flask-app internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [flask-app 1/7] FROM docker.io/library/python:3.9-alpine@sha256:c99b6eb43b3ac4d750db3d6e8b22268d5ea9a99deead7218ce3deda7f2ca029c
+#4 resolve docker.io/library/python:3.9-alpine@sha256:c99b6eb43b3ac4d750db3d6e8b22268d5ea9a99deead7218ce3deda7f2ca029c 0.0s done
+#4 DONE 0.2s
+
+#5 [flask-app internal] load build context
+#5 ...
+
+#6 [flask-app 2/7] WORKDIR /app
+#6 DONE 0.1s
+
+#5 [flask-app internal] load build context
+#5 transferring context: 6.11MB 0.2s done
+#5 DONE 0.3s
+
+#7 [flask-app 3/7] RUN apk add --no-cache     gcc     musl-dev     mariadb-dev     && rm -rf /var/cache/apk/*
+#7 0.980 fetch https://dl-cdn.alpinelinux.org/alpine/v3.22/main/x86_64/APKINDEX.tar.gz
+#7 1.097 fetch https://dl-cdn.alpinelinux.org/alpine/v3.22/community/x86_64/APKINDEX.tar.gz
+#7 1.587 (1/29) Upgrading musl (1.2.5-r10 -> 1.2.5-r12)
+#7 1.598 (2/29) Upgrading libcrypto3 (3.5.4-r0 -> 3.5.6-r0)
+#7 1.650 (3/29) Upgrading libssl3 (3.5.4-r0 -> 3.5.6-r0)
+#7 1.664 (4/29) Upgrading zlib (1.3.1-r2 -> 1.3.2-r0)
+#7 1.668 (5/29) Installing libgcc (14.2.0-r6)
+#7 1.671 (6/29) Installing jansson (2.14.1-r0)
+#7 1.673 (7/29) Installing libstdc++ (14.2.0-r6)
+#7 1.719 (8/29) Installing zstd-libs (1.5.7-r0)
+#7 1.729 (9/29) Installing binutils (2.44-r3)
+#7 1.832 (10/29) Installing libgomp (14.2.0-r6)
+#7 1.839 (11/29) Installing libatomic (14.2.0-r6)
+#7 1.840 (12/29) Installing gmp (6.3.0-r3)
+#7 1.848 (13/29) Installing isl26 (0.26-r1)
+#7 1.884 (14/29) Installing mpfr4 (4.2.1_p1-r0)
+#7 1.894 (15/29) Installing mpc1 (1.3.1-r1)
+#7 1.897 (16/29) Installing gcc (14.2.0-r6)
+#7 3.479 (17/29) Installing fmt (11.2.0-r0)
+#7 3.484 (18/29) Installing pkgconf (2.4.3-r0)
+#7 3.492 (19/29) Installing fmt-dev (11.2.0-r0)
+#7 3.504 (20/29) Installing openssl-dev (3.5.6-r0)
+#7 3.531 (21/29) Installing zlib-dev (1.3.2-r0)
+#7 3.534 (22/29) Installing mariadb-connector-c (3.3.10-r0)
+#7 3.541 (23/29) Installing mariadb-connector-c-dev (3.3.10-r0)
+#7 3.546 (24/29) Installing mariadb-common (11.4.11-r0)
+#7 3.575 (25/29) Installing libaio (0.3.113-r2)
+#7 3.577 (26/29) Installing pcre2 (10.46-r0)
+#7 3.586 (27/29) Installing mariadb-embedded (11.4.11-r0)
+#7 3.798 (28/29) Installing mariadb-dev (11.4.11-r0)
+#7 3.913 (29/29) Installing musl-dev (1.2.5-r12)
+#7 4.027 Executing busybox-1.37.0-r19.trigger
+#7 4.045 Executing ca-certificates-20250911-r0.trigger
+#7 4.333 OK: 210 MiB in 63 packages
+#7 DONE 4.7s
+
+#8 [flask-app 4/7] COPY requirement.txt .
+#8 DONE 0.7s
+
+#9 [flask-app 5/7] RUN pip install --no-cache-dir -r requirement.txt
+#9 4.790 Collecting Flask==2.0.1
+#9 4.814   Downloading Flask-2.0.1-py3-none-any.whl (94 kB)
+#9 4.824      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.8/94.8 kB 16.8 MB/s eta 0:00:00
+#9 5.033 Collecting Flask-MySQLdb==0.2.0
+#9 5.039   Downloading Flask-MySQLdb-0.2.0.tar.gz (2.1 kB)
+#9 5.050   Preparing metadata (setup.py): started
+#9 5.753   Preparing metadata (setup.py): finished with status 'done'
+#9 5.815 Collecting requests==2.26.0
+#9 5.819   Downloading requests-2.26.0-py2.py3-none-any.whl (62 kB)
+#9 5.824      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.3/62.3 kB 105.7 MB/s eta 0:00:00
+#9 5.872 Collecting Werkzeug==2.2.2
+#9 5.877   Downloading Werkzeug-2.2.2-py3-none-any.whl (232 kB)
+#9 5.882      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.7/232.7 kB 204.9 MB/s eta 0:00:00
+#9 5.915 Collecting Jinja2>=3.0
+#9 5.919   Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#9 5.923      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 192.4 MB/s eta 0:00:00
+#9 5.953 Collecting itsdangerous>=2.0
+#9 5.960   Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#9 6.024 Collecting click>=7.1.2
+#9 6.033   Downloading click-8.1.8-py3-none-any.whl (98 kB)
+#9 6.040      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.2/98.2 kB 50.9 MB/s eta 0:00:00
+#9 6.104 Collecting mysqlclient
+#9 6.109   Downloading mysqlclient-2.2.7.tar.gz (91 kB)
+#9 6.121      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.4/91.4 kB 152.6 MB/s eta 0:00:00
+#9 6.145   Installing build dependencies: started
+#9 8.487   Installing build dependencies: finished with status 'done'
+#9 8.489   Getting requirements to build wheel: started
+#9 8.910   Getting requirements to build wheel: finished with status 'done'
+#9 8.913   Preparing metadata (pyproject.toml): started
+#9 9.239   Preparing metadata (pyproject.toml): finished with status 'done'
+#9 9.294 Collecting certifi>=2017.4.17
+#9 9.299   Downloading certifi-2026.5.20-py3-none-any.whl (134 kB)
+#9 9.305      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.1/134.1 kB 227.0 MB/s eta 0:00:00
+#9 9.524 Collecting charset-normalizer~=2.0.0
+#9 9.529   Downloading charset_normalizer-2.0.12-py3-none-any.whl (39 kB)
+#9 9.597 Collecting urllib3<1.27,>=1.21.1
+#9 9.601   Downloading urllib3-1.26.20-py2.py3-none-any.whl (144 kB)
+#9 9.606      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 144.2/144.2 kB 205.0 MB/s eta 0:00:00
+#9 9.633 Collecting idna<4,>=2.5
+#9 9.637   Downloading idna-3.16-py3-none-any.whl (74 kB)
+#9 9.642      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 74.2/74.2 kB 220.8 MB/s eta 0:00:00
+#9 9.749 Collecting MarkupSafe>=2.1.1
+#9 9.755   Downloading markupsafe-3.0.3-cp39-cp39-musllinux_1_2_x86_64.whl (20 kB)
+#9 9.821 Building wheels for collected packages: Flask-MySQLdb, mysqlclient
+#9 9.823   Building wheel for Flask-MySQLdb (setup.py): started
+#9 10.19   Building wheel for Flask-MySQLdb (setup.py): finished with status 'done'
+#9 10.19   Created wheel for Flask-MySQLdb: filename=flask_mysqldb-0.2.0-py3-none-any.whl size=2709 sha256=c3a1fe212bfda97fd67316dbf27577d0aa2444dc767b480a9fde30f1e791a6f5
+#9 10.19   Stored in directory: /tmp/pip-ephem-wheel-cache-lh5e3qfm/wheels/41/ab/e5/ac1bfe8e719b0c95880c23643ce001363e8240f615f260755e
+#9 10.20   Building wheel for mysqlclient (pyproject.toml): started
+#9 12.39   Building wheel for mysqlclient (pyproject.toml): finished with status 'done'
+#9 12.39   Created wheel for mysqlclient: filename=mysqlclient-2.2.7-cp39-cp39-linux_x86_64.whl size=133988 sha256=ba7414fdc7cbb0eaa9a45205d4404f0a000614794289fb339216a33b31e59f0a
+#9 12.39   Stored in directory: /tmp/pip-ephem-wheel-cache-lh5e3qfm/wheels/ed/03/da/e61775175405d4b30c644467a6d377a98fd5a5da1bf5364614
+#9 12.40 Successfully built Flask-MySQLdb mysqlclient
+#9 12.56 Installing collected packages: urllib3, mysqlclient, MarkupSafe, itsdangerous, idna, click, charset-normalizer, certifi, Werkzeug, requests, Jinja2, Flask, Flask-MySQLdb
+#9 13.54 Successfully installed Flask-2.0.1 Flask-MySQLdb-0.2.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-2.2.2 certifi-2026.5.20 charset-normalizer-2.0.12 click-8.1.8 idna-3.16 itsdangerous-2.2.0 mysqlclient-2.2.7 requests-2.26.0 urllib3-1.26.20
+#9 13.54 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#9 13.64 
+#9 13.64 [notice] A new release of pip is available: 23.0.1 -> 26.0.1
+#9 13.64 [notice] To update, run: pip install --upgrade pip
+#9 DONE 13.9s
+
+#10 [flask-app 6/7] COPY . .
+#10 DONE 0.8s
+
+#11 [flask-app 7/7] RUN adduser -D appuser && chown -R appuser:appuser /app
+#11 DONE 1.0s
+
+#12 [flask-app] exporting to image
+#12 exporting layers
+#12 exporting layers 17.3s done
+#12 exporting manifest sha256:4ba22e6aecdab7244beb778d79b8caf497aeb29645a6bf2360a5295471979b31
+#12 exporting manifest sha256:4ba22e6aecdab7244beb778d79b8caf497aeb29645a6bf2360a5295471979b31 0.0s done
+#12 exporting config sha256:ac1c129647baf79123b3d43bc476250fe7fed46a897a7d1cb3d8a549445ea1cd 0.0s done
+#12 exporting attestation manifest sha256:8846ab2866654dc7e295da640d359c033f0da6446ac3b04d6b7a8164de250baa 0.0s done
+#12 exporting manifest list sha256:1e581e8a86e5cae138664e567b294d4645a84a075fbd42f7e96b6c29682387b2
+#12 exporting manifest list sha256:1e581e8a86e5cae138664e567b294d4645a84a075fbd42f7e96b6c29682387b2 0.0s done
+#12 naming to docker.io/library/two-tier-flask-app-deploy-flask-app:latest done
+#12 unpacking to docker.io/library/two-tier-flask-app-deploy-flask-app:latest
+#12 unpacking to docker.io/library/two-tier-flask-app-deploy-flask-app:latest 3.7s done
+#12 DONE 21.2s
+
+#13 [flask-app] resolving provenance for metadata file
+#13 DONE 0.3s
+ flask-app  Built
+ Network two-tier-flask-app-deploy_two-tier-nt  Creating
+ Network two-tier-flask-app-deploy_two-tier-nt  Created
+ Volume two-tier-flask-app-deploy_mysql_data  Creating
+ Volume two-tier-flask-app-deploy_mysql_data  Created
+ Container mysql  Creating
+ Container mysql  Error response from daemon: Conflict. The container name "/mysql" is already in use by container "38fe4eef5d5c219e39a20d74a3f97b7232751e51c30ac265b63ee1106d74f126". You have to remove (or rename) that container to be able to reuse that name.
+Error response from daemon: Conflict. The container name "/mysql" is already in use by container "38fe4eef5d5c219e39a20d74a3f97b7232751e51c30ac265b63ee1106d74f126". You have to remove (or rename) that container to be able to reuse that name.
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify Deployment)
+Stage "Verify Deployment" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Post-Deploy Cleanup)
+Stage "Post-Deploy Cleanup" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+📊 Build Summary
+[Pipeline] sh
++ docker ps -a
+CONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS                    PORTS                                                    NAMES
+38fe4eef5d5c   mysql:8.0-oracle   "docker-entrypoint.s…"   15 minutes ago   Up 15 minutes (healthy)   0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp, 33060/tcp   mysql
+[Pipeline] sh
++ docker images
++ head -10
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE                                         ID             DISK USAGE   CONTENT SIZE   EXTRA
+flask-app:build-4                             4297dafe5357        428MB          116MB        
+flask-app:latest                              4297dafe5357        428MB          116MB        
+mysql:8.0-oracle                              7dcddc01f13b        1.1GB          249MB   U    
+python:3.9-alpine                             c99b6eb43b3a       80.4MB         20.4MB        
+two-tier-flask-app-deploy-flask-app:latest    1e581e8a86e5        428MB          116MB        
+two-tier-flask-app-deploy2-flask-app:latest   22365e7a172e        428MB          116MB        
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+❌ Pipeline failed! Running emergency cleanup...
+[Pipeline] sh
++ docker system prune -f
+Deleted Networks:
+two-tier-flask-app-deploy_two-tier-nt
+
+Deleted build cache objects:
+etrwcgzepvh5hjh2idiiv91m5
+da2l01jzyq6lrlexil2ubqerm
+warsoiotoerb8a775aey6c50q
+nkla8wp6admlq5iqrie2llt53
+aubce079ytz3m90ett2xcp01k
+n1jthg84datsn24wgcd61tflt
+pep823rwi05bdhhxb3xt43vc0
+u6t67n95anxq1lta582ftgp4g
+
+Total reclaimed space: 356.3MB
+[Pipeline] sh
++ docker volume prune -f
+Total reclaimed space: 0B
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
+Jenkins 2.555.2

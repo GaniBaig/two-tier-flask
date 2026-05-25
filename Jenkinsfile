@@ -102,10 +102,10 @@ pipeline {
         
         failure {
             script {
-                echo '❌ Pipeline failed! Running emergency cleanup...'
-                // Emergency cleanup on failure
-                sh 'docker system prune -f || true'
-                sh 'docker volume prune -f || true'
+                echo '❌ Pipeline failed! Emergency cleanup is temporarily disabled for debugging...'
+                // Debug mode: keep failed containers/volumes available for inspection
+                // sh 'docker system prune -f || true'
+                // sh 'docker volume prune -f || true'
             }
         }
         
