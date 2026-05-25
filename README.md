@@ -25,7 +25,7 @@
 
 ### **1. Project Overview**
 
-This document outlines the step-by-step process for deploying a 2-tier web application (Flask + MySQL) on an AWS EC2 instance. The deployment is containerized using Docker and Docker Compose. A full CI/CD pipeline is established using Jenkins to automate the build and deployment process whenever new code is pushed to a GitHub repository.
+This document outlines the step-by-step process for deploying a 2-tier web application (Flask + MySQL) on an AWS EC2 instance. The deployment is containerized using Docker and Docker Compose. A CI/CD pipeline is established using Jenkins to automate the build and deployment process by checking the GitHub repository on a scheduled Poll SCM interval.
 
 ---
 
@@ -287,6 +287,7 @@ pipeline {
 
    * From the Jenkins dashboard, select **New Item**.
    * Name the project, choose **Pipeline**, and click **OK**.
+
 2. **Configure the Pipeline:**
 
    * In the project configuration, scroll to the **Pipeline** section.
@@ -294,18 +295,38 @@ pipeline {
    * Choose **Git** as the SCM.
    * Enter your GitHub repository URL.
    * Verify the **Script Path** is `Jenkinsfile`.
-   * Save the configuration.
+
+3. **Configure Poll SCM for Every 24 Hours:**
+
+   * In the same Jenkins job configuration, go to **Build Triggers**.
+   * Enable **Poll SCM**.
+   * Set the schedule to:
+
+   ```text
+   H H * * *
+   ```
+
+   * This tells Jenkins to check the Git repository approximately once every 24 hours.
+   * `H` means Jenkins will choose a stable hashed time automatically instead of all jobs polling at the exact same minute.
+   * This approach is useful when webhook-based triggering is not preferred or when the environment is unstable and you want a simpler automated trigger method.
+
+4. **Save the Configuration:**
+
+   * Save the Jenkins job after setting SCM polling and pipeline details.
 
 <img src="diagrams/04.png">
 
-3. **Run the Pipeline:**
+5. **Run the Pipeline:**
+
    * Click **Build Now** to trigger the pipeline manually for the first time.
    * Monitor the execution through the **Stage View** or **Console Output**.
+   * After the first successful run, Jenkins will continue checking GitHub automatically every 24 hours using Poll SCM.
 
 <img src="diagrams/05.png">
 <img src="diagrams/06.png">
 
-4. **Verify Deployment:**
+6. **Verify Deployment:**
+
    * After a successful build, your Flask application will be accessible at `http://<your-ec2-public-ip>:5001`.
    * Confirm the containers are running on the EC2 instance with `docker ps`.
 
@@ -313,7 +334,7 @@ pipeline {
 
 ### **8. Conclusion**
 
-The CI/CD pipeline is now fully operational. Any `git push` to the `main` branch of the configured GitHub repository will automatically trigger the Jenkins pipeline, which will build the new Docker image and deploy the updated application, ensuring a seamless and automated workflow from development to production.
+The CI/CD pipeline is now fully operational. Jenkins is configured to use **Poll SCM** and check the `main` branch of the configured GitHub repository once every 24 hours. When a change is detected, the Jenkins pipeline automatically runs, builds the updated application image, and deploys the latest version.
 
 ### **9. Infrastructure Diagram**
 
