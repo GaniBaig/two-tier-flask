@@ -1,0 +1,174 @@
+Skip to content
+
+Jenkins
+two-tier-flask-app-deploy
+#3
+Search
+Manage Jenkins
+Mirza Abdul Gani Baig
+Status
+Changes
+Console Output
+Edit Build Information
+Delete build ‘#3’
+Timings
+Git Build Data
+Pipeline Overview
+Restart from Stage
+Replay
+Pipeline Steps
+Workspaces
+Previous Build
+Console
+Download
+
+Copy
+View as plain text
+Started by user Mirza Abdul Gani Baig
+Restarted from build #2, stage Pre-Build Cleanup
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/two-tier-flask-app-deploy
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential a1568e22-fb7a-4d54-8ad3-07d90f41de13
+Cloning the remote Git repository
+Cloning repository https://github.com/GaniBaig/two-tier-flask.git
+ > git init /var/lib/jenkins/workspace/two-tier-flask-app-deploy # timeout=10
+Fetching upstream changes from https://github.com/GaniBaig/two-tier-flask.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+using GIT_ASKPASS to set credentials 
+ > git fetch --tags --force --progress -- https://github.com/GaniBaig/two-tier-flask.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/GaniBaig/two-tier-flask.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 2d408f5d975abac8fbe1337607ab68c91699c1f5 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 2d408f5d975abac8fbe1337607ab68c91699c1f5 # timeout=10
+Commit message: "optimise"
+ > git rev-list --no-walk 2d408f5d975abac8fbe1337607ab68c91699c1f5 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Pre-Build Cleanup)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🧹 Cleaning up before build...
+[Pipeline] sh
++ docker system prune -f
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
++ true
+[Pipeline] sh
++ df -h
++ grep -E Filesystem|/dev/root
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        19G  3.9G   15G  22% /
+[Pipeline] sh
++ docker system df
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Clone Repository)
+Stage "Clone Repository" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker Image)
+Stage "Build Docker Image" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Remove Old Images)
+Stage "Remove Old Images" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Application)
+Stage "Deploy Application" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify Deployment)
+Stage "Verify Deployment" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Post-Deploy Cleanup)
+Stage "Post-Deploy Cleanup" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+📊 Build Summary
+[Pipeline] sh
++ docker ps -a
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+[Pipeline] }
+[Pipeline] // script
+Error when executing always post condition:
+Also:   org.jenkinsci.plugins.workflow.actions.ErrorAction$ErrorId: 60131161-4785-40e4-96b7-e5ed9e53f01b
+hudson.AbortException: script returned exit code 1
+	at PluginClassLoader for workflow-durable-task-step//org.jenkinsci.plugins.workflow.steps.durable_task.DurableTaskStep$Execution.handleExit(DurableTaskStep.java:689)
+	at PluginClassLoader for workflow-durable-task-step//org.jenkinsci.plugins.workflow.steps.durable_task.DurableTaskStep$Execution.check(DurableTaskStep.java:625)
+	at PluginClassLoader for workflow-durable-task-step//org.jenkinsci.plugins.workflow.steps.durable_task.DurableTaskStep$Execution.run(DurableTaskStep.java:566)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+❌ Pipeline failed! Running emergency cleanup...
+[Pipeline] sh
++ docker system prune -f
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
++ true
+[Pipeline] sh
++ docker volume prune -f
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
++ true
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
+Jenkins 2.555.2

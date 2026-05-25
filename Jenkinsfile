@@ -30,40 +30,6 @@ pipeline {
             }
         }
         
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo '🔨 Building Flask application image...'
-                    // Build with no-cache to ensure clean build
-                    sh 'docker build -t flask-app:latest .'
-                    
-                    // Tag with build number for tracking
-                    sh "docker tag flask-app:latest flask-app:build-${BUILD_NUMBER}"
-                }
-            }
-        }
-        
-        stage('Remove Old Images') {
-            steps {
-                script {
-                    echo '🗑️ Removing old Flask images...'
-                    // Keep only last 2 builds, remove older ones
-                    sh '''
-                        # Get all flask-app images except latest and current build
-                        OLD_IMAGES=$(docker images flask-app --format "{{.Tag}}" | grep "build-" | sort -rn | tail -n +3)
-                        
-                        # Remove old images if any exist
-                        if [ ! -z "$OLD_IMAGES" ]; then
-                            for tag in $OLD_IMAGES; do
-                                echo "Removing flask-app:$tag"
-                                docker rmi flask-app:$tag || true
-                            done
-                        fi
-                    '''
-                }
-            }
-        }
-        
         stage('Deploy Application') {
             steps {
                 script {

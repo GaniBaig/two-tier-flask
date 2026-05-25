@@ -2,7 +2,7 @@ Skip to content
 
 Jenkins
 Devops-Two-Tier
-#9
+#11
 Search
 Manage Jenkins
 Mirza Abdul Gani Baig
@@ -10,7 +10,7 @@ Status
 Changes
 Console Output
 Edit Build Information
-Delete build ‘#9’
+Delete build ‘#11’
 Timings
 Git Build Data
 Pipeline Overview
@@ -30,7 +30,7 @@ Obtained Jenkinsfile from git https://github.com/GaniBaig/two-tier-flask.git
 [Pipeline] node
 Running on Jenkins in /var/lib/jenkins/workspace/Devops-Two-Tier
 [Pipeline] {
-[Pipeline] stage (hide)
+[Pipeline] stage
 [Pipeline] { (Declarative: Checkout SCM)
 [Pipeline] checkout
 Selected Git installation does not exist. Using Default
@@ -45,17 +45,61 @@ Fetching upstream changes from https://github.com/GaniBaig/two-tier-flask.git
 using GIT_ASKPASS to set credentials 
  > git fetch --tags --force --progress -- https://github.com/GaniBaig/two-tier-flask.git +refs/heads/*:refs/remotes/origin/* # timeout=10
  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
-Checking out Revision 18020c1752fdca904ec905acddde0235c344b805 (refs/remotes/origin/main)
+Checking out Revision 2d408f5d975abac8fbe1337607ab68c91699c1f5 (refs/remotes/origin/main)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 18020c1752fdca904ec905acddde0235c344b805 # timeout=10
-Commit message: "edit and delete"
+ > git checkout -f 2d408f5d975abac8fbe1337607ab68c91699c1f5 # timeout=10
+Commit message: "optimise"
  > git rev-list --no-walk 18020c1752fdca904ec905acddde0235c344b805 # timeout=10
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] withEnv
 [Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 30 min
+[Pipeline] {
 [Pipeline] stage
-[Pipeline] { (Clone repo)
+[Pipeline] { (Pre-Build Cleanup)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🧹 Cleaning up before build...
+[Pipeline] sh
++ docker system prune -f
+Deleted Images:
+untagged: sha256:b27e430108006df19da2a347175ed5c8ab4821583a279c4e72823756947a0f37
+deleted: sha256:b27e430108006df19da2a347175ed5c8ab4821583a279c4e72823756947a0f37
+untagged: sha256:c3ae504104cb863c59868c411373e8d4033cdac43fb50d5dc9adcf2f868723b5
+deleted: sha256:c3ae504104cb863c59868c411373e8d4033cdac43fb50d5dc9adcf2f868723b5
+untagged: sha256:edadb9706f50b3218d3819be899228b7352e1b5d064972b4fd0f61665614c8b5
+deleted: sha256:edadb9706f50b3218d3819be899228b7352e1b5d064972b4fd0f61665614c8b5
+untagged: sha256:faf9752265d2248836c91d6942923424cf5d4b6c6b2aacb6308c82893202477c
+deleted: sha256:faf9752265d2248836c91d6942923424cf5d4b6c6b2aacb6308c82893202477c
+untagged: sha256:04c4dedde4dc4f9bef1cc0e94e2abba3daf4bf68a42d448079b74286037ed579
+deleted: sha256:04c4dedde4dc4f9bef1cc0e94e2abba3daf4bf68a42d448079b74286037ed579
+untagged: sha256:110bcc919ec87eb52c2022549cf9d0f99fac7373ee8ce676eba0dd63e1fdad1d
+deleted: sha256:110bcc919ec87eb52c2022549cf9d0f99fac7373ee8ce676eba0dd63e1fdad1d
+
+Total reclaimed space: 48.44kB
+[Pipeline] sh
++ df -h
++ grep -E Filesystem|/dev/root
+Filesystem       Size  Used Avail Use% Mounted on
+/dev/root        6.7G  5.5G  1.2G  84% /
+[Pipeline] sh
++ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          2         0         559.8MB   93.09MB (16%)
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Clone Repository)
+[Pipeline] echo
+📥 Cloning repository...
 [Pipeline] git
 Selected Git installation does not exist. Using Default
 The recommended git tool is: NONE
@@ -68,90 +112,146 @@ Fetching upstream changes from https://github.com/GaniBaig/two-tier-flask.git
  > git --version # 'git version 2.53.0'
  > git fetch --tags --force --progress -- https://github.com/GaniBaig/two-tier-flask.git +refs/heads/*:refs/remotes/origin/* # timeout=10
  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
-Checking out Revision 18020c1752fdca904ec905acddde0235c344b805 (refs/remotes/origin/main)
+Checking out Revision 2d408f5d975abac8fbe1337607ab68c91699c1f5 (refs/remotes/origin/main)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 18020c1752fdca904ec905acddde0235c344b805 # timeout=10
+ > git checkout -f 2d408f5d975abac8fbe1337607ab68c91699c1f5 # timeout=10
  > git branch -a -v --no-abbrev # timeout=10
  > git branch -D main # timeout=10
- > git checkout -b main 18020c1752fdca904ec905acddde0235c344b805 # timeout=10
-Commit message: "edit and delete"
+ > git checkout -b main 2d408f5d975abac8fbe1337607ab68c91699c1f5 # timeout=10
+Commit message: "optimise"
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
-[Pipeline] { (Build image)
+[Pipeline] { (Build Docker Image)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🔨 Building Flask application image...
 [Pipeline] sh
-+ docker build -t flask-app .
++ docker build -t flask-app:latest .
 DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
             Install the buildx component to build images with BuildKit:
             https://docs.docker.com/go/buildx/
 
-Sending build context to Docker daemon  6.042MB
+Sending build context to Docker daemon  6.191MB
 
-Step 1/8 : FROM python:3.9-slim
- ---> 2d97f6910b16
-Step 2/8 : WORKDIR /app
- ---> Using cache
- ---> 1614685f2662
-Step 3/8 : RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config && rm -rf /var/lib/apt/lists/*
- ---> Using cache
- ---> 585763cdf8f0
-Step 4/8 : COPY requirement.txt .
- ---> Using cache
- ---> ad657713848e
-Step 5/8 : RUN pip install --no-cache-dir -r requirement.txt
- ---> Running in b085b4a7bcc9
+Step 1/10 : FROM python:3.9-alpine
+3.9-alpine: Pulling from library/python
+c9008197b8dd: Pulling fs layer
+27711589a568: Pulling fs layer
+2d35ebdb57d9: Pulling fs layer
+9806928fa0da: Pulling fs layer
+9806928fa0da: Download complete
+c9008197b8dd: Download complete
+2d35ebdb57d9: Download complete
+7b63db4652f3: Download complete
+27711589a568: Download complete
+31b532b960c3: Download complete
+2d35ebdb57d9: Pull complete
+c9008197b8dd: Pull complete
+27711589a568: Pull complete
+9806928fa0da: Pull complete
+Digest: sha256:c99b6eb43b3ac4d750db3d6e8b22268d5ea9a99deead7218ce3deda7f2ca029c
+Status: Downloaded newer image for python:3.9-alpine
+ ---> c99b6eb43b3a
+Step 2/10 : WORKDIR /app
+ ---> Running in 16aac9e7c2c9
+ ---> Removed intermediate container 16aac9e7c2c9
+ ---> 44d58c0f329c
+Step 3/10 : RUN apk add --no-cache     gcc     musl-dev     mariadb-dev     && rm -rf /var/cache/apk/*
+ ---> Running in 1db47cd30693
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.22/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.22/community/x86_64/APKINDEX.tar.gz
+(1/29) Upgrading musl (1.2.5-r10 -> 1.2.5-r12)
+(2/29) Upgrading libcrypto3 (3.5.4-r0 -> 3.5.6-r0)
+(3/29) Upgrading libssl3 (3.5.4-r0 -> 3.5.6-r0)
+(4/29) Upgrading zlib (1.3.1-r2 -> 1.3.2-r0)
+(5/29) Installing libgcc (14.2.0-r6)
+(6/29) Installing jansson (2.14.1-r0)
+(7/29) Installing libstdc++ (14.2.0-r6)
+(8/29) Installing zstd-libs (1.5.7-r0)
+(9/29) Installing binutils (2.44-r3)
+(10/29) Installing libgomp (14.2.0-r6)
+(11/29) Installing libatomic (14.2.0-r6)
+(12/29) Installing gmp (6.3.0-r3)
+(13/29) Installing isl26 (0.26-r1)
+(14/29) Installing mpfr4 (4.2.1_p1-r0)
+(15/29) Installing mpc1 (1.3.1-r1)
+(16/29) Installing gcc (14.2.0-r6)
+(17/29) Installing fmt (11.2.0-r0)
+(18/29) Installing pkgconf (2.4.3-r0)
+(19/29) Installing fmt-dev (11.2.0-r0)
+(20/29) Installing openssl-dev (3.5.6-r0)
+(21/29) Installing zlib-dev (1.3.2-r0)
+(22/29) Installing mariadb-connector-c (3.3.10-r0)
+(23/29) Installing mariadb-connector-c-dev (3.3.10-r0)
+(24/29) Installing mariadb-common (11.4.11-r0)
+(25/29) Installing libaio (0.3.113-r2)
+(26/29) Installing pcre2 (10.46-r0)
+(27/29) Installing mariadb-embedded (11.4.11-r0)
+(28/29) Installing mariadb-dev (11.4.11-r0)
+(29/29) Installing musl-dev (1.2.5-r12)
+Executing busybox-1.37.0-r19.trigger
+Executing ca-certificates-20250911-r0.trigger
+OK: 210 MiB in 63 packages
+ ---> Removed intermediate container 1db47cd30693
+ ---> 0b58c393f4c3
+Step 4/10 : COPY requirement.txt .
+ ---> c7a6085b043c
+Step 5/10 : RUN pip install --no-cache-dir -r requirement.txt
+ ---> Running in bace6ea5ed09
 Collecting Flask==2.0.1
   Downloading Flask-2.0.1-py3-none-any.whl (94 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.8/94.8 kB 13.1 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.8/94.8 kB 12.4 MB/s eta 0:00:00
 Collecting Flask-MySQLdb==0.2.0
   Downloading Flask-MySQLdb-0.2.0.tar.gz (2.1 kB)
   Preparing metadata (setup.py): started
   Preparing metadata (setup.py): finished with status 'done'
 Collecting requests==2.26.0
   Downloading requests-2.26.0-py2.py3-none-any.whl (62 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.3/62.3 kB 152.1 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.3/62.3 kB 124.0 MB/s eta 0:00:00
 Collecting Werkzeug==2.2.2
   Downloading Werkzeug-2.2.2-py3-none-any.whl (232 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.7/232.7 kB 63.2 MB/s eta 0:00:00
-Collecting itsdangerous>=2.0
-  Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
-Collecting Jinja2>=3.0
-  Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 203.6 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.7/232.7 kB 46.3 MB/s eta 0:00:00
 Collecting click>=7.1.2
   Downloading click-8.1.8-py3-none-any.whl (98 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.2/98.2 kB 219.9 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.2/98.2 kB 140.3 MB/s eta 0:00:00
+Collecting Jinja2>=3.0
+  Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 183.6 MB/s eta 0:00:00
+Collecting itsdangerous>=2.0
+  Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
 Collecting mysqlclient
   Downloading mysqlclient-2.2.7.tar.gz (91 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.4/91.4 kB 211.5 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.4/91.4 kB 211.3 MB/s eta 0:00:00
   Installing build dependencies: started
   Installing build dependencies: finished with status 'done'
   Getting requirements to build wheel: started
   Getting requirements to build wheel: finished with status 'done'
   Preparing metadata (pyproject.toml): started
   Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting urllib3<1.27,>=1.21.1
+  Downloading urllib3-1.26.20-py2.py3-none-any.whl (144 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 144.2/144.2 kB 205.6 MB/s eta 0:00:00
+Collecting certifi>=2017.4.17
+  Downloading certifi-2026.5.20-py3-none-any.whl (134 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.1/134.1 kB 224.4 MB/s eta 0:00:00
 Collecting charset-normalizer~=2.0.0
   Downloading charset_normalizer-2.0.12-py3-none-any.whl (39 kB)
 Collecting idna<4,>=2.5
   Downloading idna-3.16-py3-none-any.whl (74 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 74.2/74.2 kB 215.1 MB/s eta 0:00:00
-Collecting certifi>=2017.4.17
-  Downloading certifi-2026.5.20-py3-none-any.whl (134 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.1/134.1 kB 209.2 MB/s eta 0:00:00
-Collecting urllib3<1.27,>=1.21.1
-  Downloading urllib3-1.26.20-py2.py3-none-any.whl (144 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 144.2/144.2 kB 205.6 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 74.2/74.2 kB 143.9 MB/s eta 0:00:00
 Collecting MarkupSafe>=2.1.1
-  Downloading markupsafe-3.0.3-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (20 kB)
+  Downloading markupsafe-3.0.3-cp39-cp39-musllinux_1_2_x86_64.whl (20 kB)
 Building wheels for collected packages: Flask-MySQLdb, mysqlclient
   Building wheel for Flask-MySQLdb (setup.py): started
   Building wheel for Flask-MySQLdb (setup.py): finished with status 'done'
-  Created wheel for Flask-MySQLdb: filename=flask_mysqldb-0.2.0-py3-none-any.whl size=2709 sha256=eb0f8046aa78eddd824bae04311e2fba442f8b0df8d37497dc491e232eb2b46b
-  Stored in directory: /tmp/pip-ephem-wheel-cache-3so0ejp0/wheels/41/ab/e5/ac1bfe8e719b0c95880c23643ce001363e8240f615f260755e
+  Created wheel for Flask-MySQLdb: filename=flask_mysqldb-0.2.0-py3-none-any.whl size=2709 sha256=252b662add7ca3b9d9c667868d89de84ccc6d617fb03427606ea76c453acec46
+  Stored in directory: /tmp/pip-ephem-wheel-cache-exwf6eza/wheels/41/ab/e5/ac1bfe8e719b0c95880c23643ce001363e8240f615f260755e
   Building wheel for mysqlclient (pyproject.toml): started
   Building wheel for mysqlclient (pyproject.toml): finished with status 'done'
-  Created wheel for mysqlclient: filename=mysqlclient-2.2.7-cp39-cp39-linux_x86_64.whl size=133783 sha256=356e6f6b509228e7cbc34ca1bf7fc7d0c9dbffafec0348c34491ac90d8f89047
-  Stored in directory: /tmp/pip-ephem-wheel-cache-3so0ejp0/wheels/ed/03/da/e61775175405d4b30c644467a6d377a98fd5a5da1bf5364614
+  Created wheel for mysqlclient: filename=mysqlclient-2.2.7-cp39-cp39-linux_x86_64.whl size=133990 sha256=1b80d585889186d5d50b96d990c2867d49e8a7d15d17e364a9c8daa793609fcd
+  Stored in directory: /tmp/pip-ephem-wheel-cache-exwf6eza/wheels/ed/03/da/e61775175405d4b30c644467a6d377a98fd5a5da1bf5364614
 Successfully built Flask-MySQLdb mysqlclient
 Installing collected packages: urllib3, mysqlclient, MarkupSafe, itsdangerous, idna, click, charset-normalizer, certifi, Werkzeug, requests, Jinja2, Flask, Flask-MySQLdb
 Successfully installed Flask-2.0.1 Flask-MySQLdb-0.2.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-2.2.2 certifi-2026.5.20 charset-normalizer-2.0.12 click-8.1.8 idna-3.16 itsdangerous-2.2.0 mysqlclient-2.2.7 requests-2.26.0 urllib3-1.26.20
@@ -159,287 +259,399 @@ Successfully installed Flask-2.0.1 Flask-MySQLdb-0.2.0 Jinja2-3.1.6 MarkupSafe-3
 [0m[91m
 [notice] A new release of pip is available: 23.0.1 -> 26.0.1
 [notice] To update, run: pip install --upgrade pip
-[0m ---> Removed intermediate container b085b4a7bcc9
- ---> cb561fb8e782
-Step 6/8 : COPY . .
- ---> e171369f1156
-Step 7/8 : EXPOSE 5001
- ---> Running in 283cc73e900b
- ---> Removed intermediate container 283cc73e900b
- ---> 28202dc6bcc8
-Step 8/8 : CMD ["python", "app.py"]
- ---> Running in 7353c766727e
- ---> Removed intermediate container 7353c766727e
- ---> 1b01940f3262
-Successfully built 1b01940f3262
+[0m ---> Removed intermediate container bace6ea5ed09
+ ---> 5234d859dd15
+Step 6/10 : COPY . .
+ ---> 31824b21d97e
+Step 7/10 : EXPOSE 5001
+ ---> Running in 0255b54d9833
+ ---> Removed intermediate container 0255b54d9833
+ ---> 04a55b7443dc
+Step 8/10 : RUN adduser -D appuser && chown -R appuser:appuser /app
+ ---> Running in 10fa1347e69d
+ ---> Removed intermediate container 10fa1347e69d
+ ---> 2d1d84cb59cd
+Step 9/10 : USER appuser
+ ---> Running in 69ec99245eff
+ ---> Removed intermediate container 69ec99245eff
+ ---> 87a13d4dc3d1
+Step 10/10 : CMD ["python", "app.py"]
+ ---> Running in 93064ad2b28c
+ ---> Removed intermediate container 93064ad2b28c
+ ---> b783483d25c3
+Successfully built b783483d25c3
 Successfully tagged flask-app:latest
+[Pipeline] sh
++ docker tag flask-app:latest flask-app:build-11
+[Pipeline] }
+[Pipeline] // script
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
-[Pipeline] { (Deploy with docker compose)
+[Pipeline] { (Remove Old Images)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🗑️ Removing old Flask images...
 [Pipeline] sh
-+ docker compose down
-time="2026-05-24T10:09:10Z" level=warning msg="/var/lib/jenkins/workspace/Devops-Two-Tier/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
-[Pipeline] sh
-+ docker compose up -d --build
-time="2026-05-24T10:09:10Z" level=warning msg="/var/lib/jenkins/workspace/Devops-Two-Tier/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
- mysql Pulling 
- 802b6dd0c6bd Pulling fs layer 
- 69edacfaea72 Pulling fs layer 
- 8e3f19ed5e67 Pulling fs layer 
- 35300b480a58 Pulling fs layer 
- 5491a2a13e1b Pulling fs layer 
- e80b372994e5 Pulling fs layer 
- 4f23ccd26206 Pulling fs layer 
- 8ec50bfa3b7e Pulling fs layer 
- 1dced004aaec Pulling fs layer 
- f74943462a4f Pulling fs layer 
- 802b6dd0c6bd Download complete 
- f74943462a4f Downloading [================>                                  ]  2.097MB/6.171MB
- f74943462a4f Downloading [==========================================>        ]  5.243MB/6.171MB
- 69edacfaea72 Downloading [==================================================>]     884B/884B
- 35300b480a58 Download complete 
- 5491a2a13e1b Downloading [>                                                  ]  1.049MB/56.97MB
- e80b372994e5 Download complete 
- 8ec50bfa3b7e Downloading [==================================================>]  2.606kB/2.606kB
- 1dced004aaec Downloading [=>                                                 ]  1.049MB/47.31MB
- 69edacfaea72 Download complete 
- 8e3f19ed5e67 Download complete 
- 5491a2a13e1b Downloading [===>                                               ]  4.194MB/56.97MB
- 4f23ccd26206 Downloading [>                                                  ]  3.146MB/162.2MB
- 8ec50bfa3b7e Download complete 
- f74943462a4f Download complete 
- 5491a2a13e1b Downloading [======>                                            ]   7.34MB/56.97MB
- 4f23ccd26206 Downloading [==>                                                ]   7.34MB/162.2MB
- 1dced004aaec Downloading [=====>                                             ]  5.243MB/47.31MB
- 4f23ccd26206 Downloading [===>                                               ]  11.53MB/162.2MB
- 9c6d3f438d99 Download complete 
- 1dced004aaec Downloading [========>                                          ]  8.389MB/47.31MB
- 5491a2a13e1b Downloading [==========>                                        ]  11.53MB/56.97MB
- b3e52f10da63 Downloading [=========>                                         ]  3.146MB/16.79MB
- 1dced004aaec Downloading [============>                                      ]  11.53MB/47.31MB
- 5491a2a13e1b Downloading [============>                                      ]  14.68MB/56.97MB
- 4f23ccd26206 Downloading [====>                                              ]  14.68MB/162.2MB
- 4f23ccd26206 Downloading [=====>                                             ]  17.83MB/162.2MB
- b3e52f10da63 Downloading [=====================>                             ]   7.34MB/16.79MB
- 1dced004aaec Downloading [===============>                                   ]  14.68MB/47.31MB
- 5491a2a13e1b Downloading [===============>                                   ]  17.83MB/56.97MB
- 1dced004aaec Downloading [==================>                                ]  17.83MB/47.31MB
- 5491a2a13e1b Downloading [===================>                               ]  22.02MB/56.97MB
- 4f23ccd26206 Downloading [======>                                            ]  20.97MB/162.2MB
- b3e52f10da63 Downloading [============================>                      ]  9.437MB/16.79MB
- b3e52f10da63 Downloading [==================================>                ]  11.53MB/16.79MB
- 1dced004aaec Downloading [=====================>                             ]  19.92MB/47.31MB
- 5491a2a13e1b Downloading [=====================>                             ]  24.12MB/56.97MB
- 4f23ccd26206 Downloading [=======>                                           ]  24.12MB/162.2MB
- 5491a2a13e1b Downloading [========================>                          ]  28.31MB/56.97MB
- 4f23ccd26206 Downloading [========>                                          ]  26.21MB/162.2MB
- b3e52f10da63 Downloading [========================================>          ]  13.63MB/16.79MB
- 1dced004aaec Downloading [========================>                          ]  23.07MB/47.31MB
- b3e52f10da63 Download complete 
- 1dced004aaec Downloading [===========================>                       ]  26.21MB/47.31MB
- 5491a2a13e1b Downloading [===========================>                       ]  31.46MB/56.97MB
- 4f23ccd26206 Downloading [=========>                                         ]  30.41MB/162.2MB
- 5491a2a13e1b Downloading [===============================>                   ]  35.65MB/56.97MB
- 4f23ccd26206 Downloading [==========>                                        ]  35.65MB/162.2MB
- 1dced004aaec Downloading [================================>                  ]  30.41MB/47.31MB
- 1dced004aaec Downloading [===================================>               ]  33.55MB/47.31MB
- 5491a2a13e1b Downloading [==================================>                ]  39.85MB/56.97MB
- 4f23ccd26206 Downloading [============>                                      ]  39.85MB/162.2MB
- 5491a2a13e1b Downloading [=======================================>           ]  45.09MB/56.97MB
- 4f23ccd26206 Downloading [=============>                                     ]  45.09MB/162.2MB
- 1dced004aaec Downloading [=======================================>           ]  37.75MB/47.31MB
- 1dced004aaec Downloading [============================================>      ]  41.94MB/47.31MB
- 5491a2a13e1b Downloading [===========================================>       ]  49.28MB/56.97MB
- 4f23ccd26206 Downloading [==============>                                    ]  48.23MB/162.2MB
- 1dced004aaec Downloading [=================================================> ]  47.19MB/47.31MB
- 5491a2a13e1b Downloading [==============================================>    ]  52.43MB/56.97MB
- 4f23ccd26206 Downloading [================>                                  ]  53.48MB/162.2MB
- 1dced004aaec Download complete 
- 5491a2a13e1b Downloading [==================================================>]  56.97MB/56.97MB
- 4f23ccd26206 Downloading [==================>                                ]  58.72MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [====================>                              ]  66.06MB/162.2MB
- 5491a2a13e1b Download complete 
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [======================>                            ]  74.45MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [=========================>                         ]  81.79MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [===========================>                       ]  90.18MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [=============================>                     ]  95.42MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [===============================>                   ]  103.8MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [==================================>                ]  112.2MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [====================================>              ]  118.5MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [======================================>            ]  124.8MB/162.2MB
- 1dced004aaec Extracting 1 s
- 4f23ccd26206 Downloading [=========================================>         ]  133.2MB/162.2MB
- 1dced004aaec Extracting 2 s
- 4f23ccd26206 Downloading [==========================================>        ]  139.5MB/162.2MB
- 1dced004aaec Extracting 2 s
- 4f23ccd26206 Downloading [==============================================>    ]  149.9MB/162.2MB
- 1dced004aaec Extracting 2 s
- 4f23ccd26206 Downloading [================================================>  ]  156.2MB/162.2MB
- 1dced004aaec Extracting 2 s
- 4f23ccd26206 Download complete 
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 2 s
- 1dced004aaec Extracting 3 s
- 69edacfaea72 Pull complete 
- 1dced004aaec Pull complete 
- 8e3f19ed5e67 Pull complete 
- f74943462a4f Extracting 1 s
- f74943462a4f Extracting 1 s
- 35300b480a58 Pull complete 
- 8ec50bfa3b7e Pull complete 
- f74943462a4f Pull complete 
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 1 s
- 5491a2a13e1b Extracting 2 s
- 5491a2a13e1b Extracting 2 s
- 5491a2a13e1b Extracting 2 s
- 5491a2a13e1b Extracting 2 s
- e80b372994e5 Pull complete 
- 5491a2a13e1b Pull complete 
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 1 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 2 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 3 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 4 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 5 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 6 s
- 4f23ccd26206 Extracting 7 s
- 4f23ccd26206 Extracting 7 s
- 4f23ccd26206 Extracting 7 s
- 4f23ccd26206 Extracting 7 s
-failed to extract layer (application/vnd.oci.image.layer.v1.tar+gzip sha256:4f23ccd262062f75641ff194f36799296fa69a59c553e53817ca827dd5e473d3) to overlayfs as "extract-347445535-JguL sha256:84ac56e5749bb8d340f7d5c2a24ec34f39df34b8d4f3ea1392ab2f864231f74d": write /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/57/fs/usr/lib/mysqlsh/libjitexecutor.so: no space left on device
++ docker images flask-app --format {{.Tag}}
++ grep build-
++ sort -rn
++ tail -n +3
++ OLD_IMAGES=
++ [ ! -z  ]
+[Pipeline] }
+[Pipeline] // script
 [Pipeline] }
 [Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Application)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+🚀 Deploying application with Docker Compose...
+[Pipeline] sh
++ docker compose down
+time="2026-05-24T10:37:52Z" level=warning msg="/var/lib/jenkins/workspace/Devops-Two-Tier/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[Pipeline] sh
++ docker compose up -d --build
+time="2026-05-24T10:37:53Z" level=warning msg="/var/lib/jenkins/workspace/Devops-Two-Tier/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ mysql Pulling 
+ 96d30d9fbee8 Pulling fs layer 
+ edf85873f64e Pulling fs layer 
+ 6ef6c7b50a93 Pulling fs layer 
+ e3e5d1ac74c1 Pulling fs layer 
+ a63160a5eda1 Pulling fs layer 
+ 0d74d296605b Pulling fs layer 
+ 297d04cfe470 Pulling fs layer 
+ 4c8a3e0d4e4b Pulling fs layer 
+ 49ec2dab01d9 Pulling fs layer 
+ 7534d1db9f8d Pulling fs layer 
+ ab24264a27e9 Pulling fs layer 
+ 96d30d9fbee8 Download complete 
+ edf85873f64e Downloading [=====>                                             ]  5.243MB/47.31MB
+ e3e5d1ac74c1 Downloading [==================================================>]  783.6kB/783.6kB
+ a63160a5eda1 Downloading [=>                                                 ]  1.049MB/49.93MB
+ 0d74d296605b Downloading [========>                                          ]  1.049MB/6.173MB
+ 297d04cfe470 Download complete 
+ 7534d1db9f8d Download complete 
+ ab24264a27e9 Downloading [==================================================>]  5.327kB/5.327kB
+ 6ef6c7b50a93 Download complete 
+ 4c8a3e0d4e4b Download complete 
+ edf85873f64e Downloading [=========>                                         ]  9.437MB/47.31MB
+ e3e5d1ac74c1 Download complete 
+ edf85873f64e Downloading [============>                                      ]  11.53MB/47.31MB
+ a63160a5eda1 Downloading [====>                                              ]  4.194MB/49.93MB
+ 0d74d296605b Downloading [=========================>                         ]  3.146MB/6.173MB
+ ab24264a27e9 Download complete 
+ 49ec2dab01d9 Downloading [>                                                  ]  2.097MB/129.4MB
+ edf85873f64e Downloading [================>                                  ]  15.73MB/47.31MB
+ a63160a5eda1 Downloading [=======>                                           ]   7.34MB/49.93MB
+ 0d74d296605b Downloading [==================================================>]  6.173MB/6.173MB
+ 49ec2dab01d9 Downloading [==>                                                ]  5.243MB/129.4MB
+ a63160a5eda1 Downloading [==========>                                        ]  10.49MB/49.93MB
+ 0d74d296605b Download complete 
+ 49ec2dab01d9 Downloading [===>                                               ]  8.389MB/129.4MB
+ 796812c73292 Download complete 
+ edf85873f64e Downloading [===================>                               ]  18.87MB/47.31MB
+ edf85873f64e Downloading [========================>                          ]  23.07MB/47.31MB
+ a63160a5eda1 Downloading [=============>                                     ]  13.63MB/49.93MB
+ 49ec2dab01d9 Downloading [====>                                              ]  11.53MB/129.4MB
+ edf85873f64e Downloading [==========================>                        ]  25.17MB/47.31MB
+ af166387641d Downloading [======>                                            ]  2.097MB/15.43MB
+ a63160a5eda1 Downloading [================>                                  ]  16.78MB/49.93MB
+ 49ec2dab01d9 Downloading [======>                                            ]  15.73MB/129.4MB
+ 49ec2dab01d9 Downloading [=======>                                           ]  18.87MB/129.4MB
+ edf85873f64e Downloading [===============================>                   ]  29.36MB/47.31MB
+ af166387641d Downloading [================>                                  ]  5.243MB/15.43MB
+ a63160a5eda1 Downloading [====================>                              ]  20.97MB/49.93MB
+ 49ec2dab01d9 Downloading [========>                                          ]  20.97MB/129.4MB
+ edf85873f64e Downloading [==================================>                ]  32.51MB/47.31MB
+ af166387641d Downloading [===========================>                       ]  8.389MB/15.43MB
+ a63160a5eda1 Downloading [========================>                          ]  24.12MB/49.93MB
+ 49ec2dab01d9 Downloading [=========>                                         ]  25.17MB/129.4MB
+ edf85873f64e Downloading [======================================>            ]   36.7MB/47.31MB
+ af166387641d Downloading [=====================================>             ]  11.53MB/15.43MB
+ a63160a5eda1 Downloading [============================>                      ]  28.31MB/49.93MB
+ 49ec2dab01d9 Downloading [===========>                                       ]  30.41MB/129.4MB
+ edf85873f64e Downloading [=============================================>     ]  42.99MB/47.31MB
+ af166387641d Download complete 
+ a63160a5eda1 Downloading [=================================>                 ]  33.55MB/49.93MB
+ edf85873f64e Downloading [================================================>  ]  46.14MB/47.31MB
+ a63160a5eda1 Downloading [====================================>              ]   36.7MB/49.93MB
+ 49ec2dab01d9 Downloading [=============>                                     ]   34.6MB/129.4MB
+ a63160a5eda1 Downloading [========================================>          ]  40.89MB/49.93MB
+ 49ec2dab01d9 Downloading [==============>                                    ]  37.75MB/129.4MB
+ edf85873f64e Download complete 
+ edf85873f64e Extracting 1 s
+ a63160a5eda1 Downloading [============================================>      ]  44.04MB/49.93MB
+ 49ec2dab01d9 Downloading [===============>                                   ]  40.89MB/129.4MB
+ edf85873f64e Extracting 1 s
+ a63160a5eda1 Downloading [==================================================>]  49.93MB/49.93MB
+ 49ec2dab01d9 Downloading [=================>                                 ]  45.09MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [===================>                               ]  50.33MB/129.4MB
+ a63160a5eda1 Download complete 
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [======================>                            ]  58.72MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [=========================>                         ]  66.06MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [============================>                      ]   73.4MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [==============================>                    ]  79.69MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [=================================>                 ]  85.98MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [==================================>                ]  89.13MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [==================================>                ]  89.13MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [==================================>                ]  89.13MB/129.4MB
+ edf85873f64e Extracting 1 s
+ 49ec2dab01d9 Downloading [====================================>              ]  95.42MB/129.4MB
+ edf85873f64e Extracting 2 s
+ 49ec2dab01d9 Downloading [======================================>            ]  99.61MB/129.4MB
+ edf85873f64e Extracting 2 s
+ 49ec2dab01d9 Downloading [========================================>          ]  105.9MB/129.4MB
+ edf85873f64e Extracting 2 s
+ 49ec2dab01d9 Downloading [===========================================>       ]  113.2MB/129.4MB
+ edf85873f64e Extracting 2 s
+ 49ec2dab01d9 Downloading [==============================================>    ]  119.5MB/129.4MB
+ edf85873f64e Extracting 2 s
+ 49ec2dab01d9 Downloading [=================================================> ]  126.9MB/129.4MB
+ edf85873f64e Extracting 2 s
+ 49ec2dab01d9 Download complete 
+ edf85873f64e Extracting 2 s
+ edf85873f64e Extracting 2 s
+ edf85873f64e Extracting 2 s
+ edf85873f64e Extracting 2 s
+ edf85873f64e Extracting 3 s
+ edf85873f64e Pull complete 
+ 6ef6c7b50a93 Pull complete 
+ e3e5d1ac74c1 Pull complete 
+ 0d74d296605b Extracting 1 s
+ 0d74d296605b Extracting 1 s
+ 297d04cfe470 Pull complete 
+ 4c8a3e0d4e4b Pull complete 
+ 0d74d296605b Pull complete 
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 1 s
+ a63160a5eda1 Extracting 2 s
+ a63160a5eda1 Extracting 2 s
+ a63160a5eda1 Extracting 2 s
+ 7534d1db9f8d Pull complete 
+ a63160a5eda1 Pull complete 
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 1 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 2 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 3 s
+ 49ec2dab01d9 Extracting 4 s
+ 49ec2dab01d9 Extracting 4 s
+failed to extract layer (application/vnd.oci.image.layer.v1.tar+gzip sha256:49ec2dab01d93d549839d59c815b48a834beca654fc9d45a86eaddc8fd82cc5a) to overlayfs as "extract-362019084-IdrF sha256:1758c02b7829c4fd1d9254a6182c39789d5add3edc47d482e03b342bf273524e": write /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/142/fs/usr/lib/mysqlsh/lib/python3.13/site-packages/oci/fleet_software_update/models/rollback_cycle_fsu_job.py: no space left on device
+[8mha:////4C0xvgcHWbZMVJ7z8noBfF335hPC+UBBVaqArAh+vG77AAAApB+LCAAAAAAAAP9tjTEOwjAQBC9BFLSUPOJCQxpEldZKwwtMbIwT687YDknFi/gaf8AiEhVbrHa2mdcb1jHAiYPBXtNgKXYWvRtNXjhxGK6OJ+z5gh1TZKex1VPLSjcLtpw0LClKWAnYaOocR0smwVb08iErJ8lU5xTydxRQWnWHJxQim5MM6QtzgN1tVJHp5/krgNn7BGW9z3WoPwb5Ql6+AAAA[0m[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify Deployment)
+Stage "Verify Deployment" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Post-Deploy Cleanup)
+Stage "Post-Deploy Cleanup" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+📊 Build Summary
+[Pipeline] sh
++ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+[Pipeline] sh
++ docker images
++ head -10
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
+flask-app:build-11   b783483d25c3        428MB          116MB        
+flask-app:latest     b783483d25c3        428MB          116MB        
+python:3.9-alpine    c99b6eb43b3a       80.4MB         20.4MB        
+python:3.9-slim      2d97f6910b16        185MB         47.2MB        
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+❌ Pipeline failed! Running emergency cleanup...
+[Pipeline] sh
++ docker system prune -f
+Deleted Images:
+untagged: sha256:0b58c393f4c3b55eac547f29eae2482b5e547ee07e3044b4f3d987d8c6b9314d
+deleted: sha256:0b58c393f4c3b55eac547f29eae2482b5e547ee07e3044b4f3d987d8c6b9314d
+untagged: sha256:2d1d84cb59cd691132919394f4173d979807483e401bc97b2ed8d263dbdccbaa
+deleted: sha256:2d1d84cb59cd691132919394f4173d979807483e401bc97b2ed8d263dbdccbaa
+untagged: sha256:44d58c0f329cb6080a6cf5c461771f5ebb585b463c1b266c6d60cb7097ea0014
+deleted: sha256:44d58c0f329cb6080a6cf5c461771f5ebb585b463c1b266c6d60cb7097ea0014
+untagged: sha256:5234d859dd158bcb1c2410c621253d9938e2a574099707d2e65b6461400d86a4
+deleted: sha256:5234d859dd158bcb1c2410c621253d9938e2a574099707d2e65b6461400d86a4
+untagged: sha256:905174933253af1dc0266c5e36226421a941e11b6f2fe07d397705c75ad65b0d
+deleted: sha256:905174933253af1dc0266c5e36226421a941e11b6f2fe07d397705c75ad65b0d
+untagged: sha256:c7a6085b043c07c4cec665c6c67f4acaded5e96c2f8ec0fc75113b818d386525
+deleted: sha256:c7a6085b043c07c4cec665c6c67f4acaded5e96c2f8ec0fc75113b818d386525
+untagged: sha256:04a55b7443dcb3e081d933510a40ccbeb845d721ebaf7e780663ae14ed62578f
+deleted: sha256:04a55b7443dcb3e081d933510a40ccbeb845d721ebaf7e780663ae14ed62578f
+untagged: sha256:31824b21d97ea32ecdffbb171d99acc48c29b199c3b20dc174d545d4dbba561a
+deleted: sha256:31824b21d97ea32ecdffbb171d99acc48c29b199c3b20dc174d545d4dbba561a
+untagged: sha256:87a13d4dc3d111c4db304c77dab4307547c4ac28f8c5ab5fa44e0b101c5c06fa
+deleted: sha256:87a13d4dc3d111c4db304c77dab4307547c4ac28f8c5ab5fa44e0b101c5c06fa
+
+Total reclaimed space: 99.95MB
+[Pipeline] sh
++ docker volume prune -f
+Total reclaimed space: 0B
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
 [Pipeline] }
 [Pipeline] // withEnv
 [Pipeline] }
 [Pipeline] // node
 [Pipeline] End of Pipeline
 an exception which occurred:
-	in object com.cloudbees.groovy.cps.sandbox.Untrusted
-	in field com.cloudbees.groovy.cps.impl.CallSiteBlockSupport.tags
-	in object com.cloudbees.groovy.cps.impl.FunctionCallBlock@1e23bf0e
-	in field com.cloudbees.groovy.cps.impl.SequenceBlock.exp1
-	in object com.cloudbees.groovy.cps.impl.SequenceBlock@58a9c8b3
-	in field com.cloudbees.groovy.cps.impl.BlockScopedBlock.exp
-	in object com.cloudbees.groovy.cps.impl.BlockScopedBlock@4a10ceb6
-	in field com.cloudbees.groovy.cps.impl.CpsCallable.body
-	in object com.cloudbees.groovy.cps.impl.CpsClosureDef@e72a0a0
-	in field com.cloudbees.groovy.cps.impl.CpsClosure.def
-	in object org.jenkinsci.plugins.workflow.cps.CpsClosure2@38f2af5
-	in field com.cloudbees.groovy.cps.impl.FunctionCallEnv.locals
-	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@51501653 @WorkflowScript.run(WorkflowScript:1)
+	in field org.jenkinsci.plugins.workflow.cps.ContextVariableSet.values
+	in object ContextVariableSet[hudson.EnvVars, org.jenkinsci.plugins.workflow.support.steps.ExecutorStepDynamicContext]
+	in field org.jenkinsci.plugins.workflow.cps.ContextVariableSet.parent
+	in object ContextVariableSet[org.jenkinsci.plugins.workflow.steps.EnvironmentExpander$MergedEnvironmentExpander]<ContextVariableSet[hudson.EnvVars, org.jenkinsci.plugins.workflow.support.steps.ExecutorStepDynamicContext]
+	in field org.jenkinsci.plugins.workflow.cps.CpsThread.contextVariables
+	in object Thread #6 @5e8ddd84
+	in field org.jenkinsci.plugins.workflow.cps.CpsBodyExecution.thread
+	in object org.jenkinsci.plugins.workflow.cps.CpsBodyExecution@449e7f35
+	in field org.jenkinsci.plugins.workflow.cps.CpsBodyExecution$SuccessAdapter.this$0
+	in object org.jenkinsci.plugins.workflow.cps.CpsBodyExecution$SuccessAdapter@2f227576
+	in field com.cloudbees.groovy.cps.impl.CallEnv.returnAddress
+	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@6e50a0ff
 	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@61c68b80
-	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@7766178a
-	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@38721d47
-	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.TryBlockEnv@529c575c
-	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@37142452
+	in object com.cloudbees.groovy.cps.impl.TryBlockEnv@58bcd4e8
 	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
-	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@142e3874 @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.call(ModelInterpreter.groovy:78)
+	in object com.cloudbees.groovy.cps.impl.ClosureCallEnv@47b68321
 	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@49194426
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@5a49689b
 	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@84ef74a
-	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@3c0c7b36
-	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@76157ffe
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@2370151d
 	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
-	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@20dd41d3 @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.inDeclarativeAgent(ModelInterpreter.groovy:570)
+	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@1923c9f2 @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.call(ModelInterpreter.groovy:79)
 	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@2052c039
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@1dd5c10f
 	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
-	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@6a6db082
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@84e21c1
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@4c1edefd
+	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
+	in object com.cloudbees.groovy.cps.impl.ClosureCallEnv@74460a5d @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.withCredentialsBlock(ModelInterpreter.groovy:464)
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@7d99b10d
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@70a01383
+	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
+	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@15bdbe1b @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.call(ModelInterpreter.groovy:80)
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@1a826a81
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@29748802
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@5dc717f8
+	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
+	in object com.cloudbees.groovy.cps.impl.ClosureCallEnv@2e9b5b91 @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.withEnvBlock(ModelInterpreter.groovy:432)
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@3195e0bc
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@580040d0
+	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
+	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@6d62df0 @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.call(ModelInterpreter.groovy:81)
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@1eb02423
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@61010fbb
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@7e640d8f
+	in field com.cloudbees.groovy.cps.impl.CallEnv.caller
+	in object com.cloudbees.groovy.cps.impl.FunctionCallEnv@2b869f9f @org.jenkinsci.plugins.pipeline.modeldefinition.ModelInterpreter.inWrappers(ModelInterpreter.groovy:590)
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@450d1bb6
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@2f5004cc
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@4943da54
+	in field com.cloudbees.groovy.cps.impl.ProxyEnv.parent
+	in object com.cloudbees.groovy.cps.impl.BlockScopeEnv@1dee7171
 	in field com.cloudbees.groovy.cps.impl.CpsClosureDef.capture
-	in object com.cloudbees.groovy.cps.impl.CpsClosureDef@6a4553f
+	in object com.cloudbees.groovy.cps.impl.CpsClosureDef@1cb6b88d
 	in field com.cloudbees.groovy.cps.impl.CpsClosure.def
-	in object org.jenkinsci.plugins.workflow.cps.CpsClosure2@fb5bb91
+	in object org.jenkinsci.plugins.workflow.cps.CpsClosure2@7eb3c8c3
 	in field org.jenkinsci.plugins.workflow.cps.CpsThreadGroup.closures
-	in object org.jenkinsci.plugins.workflow.cps.CpsThreadGroup@1ebdf926
-	in object org.jenkinsci.plugins.workflow.cps.CpsThreadGroup@1ebdf926
-Also:   org.jenkinsci.plugins.workflow.actions.ErrorAction$ErrorId: 003d1825-822e-4c0f-8d27-188261d0e838
+	in object org.jenkinsci.plugins.workflow.cps.CpsThreadGroup@4c92002
+	in object org.jenkinsci.plugins.workflow.cps.CpsThreadGroup@4c92002
+Also:   java.io.IOException: No space left on device
+		at java.base/sun.nio.ch.UnixFileDispatcherImpl.write0(Native Method)
+		at java.base/sun.nio.ch.UnixFileDispatcherImpl.write(UnixFileDispatcherImpl.java:65)
+		at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:137)
+		at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:102)
+		at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:72)
+		at java.base/sun.nio.ch.FileChannelImpl.write(FileChannelImpl.java:300)
+		at PluginClassLoader for workflow-support//org.jenkinsci.plugins.workflow.support.pickles.serialization.RiverWriter$FileChannelOutput.write(RiverWriter.java:215)
+		at PluginClassLoader for workflow-support//org.jboss.marshalling.SimpleDataOutput.flush(SimpleDataOutput.java:336)
+		at PluginClassLoader for workflow-support//org.jboss.marshalling.SimpleDataOutput.finish(SimpleDataOutput.java:378)
+		at PluginClassLoader for workflow-support//org.jboss.marshalling.AbstractMarshaller.finish(AbstractMarshaller.java:131)
+		at PluginClassLoader for workflow-support//org.jenkinsci.plugins.workflow.support.pickles.serialization.RiverWriter.close(RiverWriter.java:172)
+		at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup.saveProgram(CpsThreadGroup.java:638)
+Also:   org.jenkinsci.plugins.workflow.actions.ErrorAction$ErrorId: eb106bbb-8077-4d15-a6a2-1ebdb383d8f2
 Caused: java.io.IOException: No space left on device
 	at java.base/sun.nio.ch.UnixFileDispatcherImpl.write0(Native Method)
 	at java.base/sun.nio.ch.UnixFileDispatcherImpl.write(UnixFileDispatcherImpl.java:65)
@@ -448,23 +660,36 @@ Caused: java.io.IOException: No space left on device
 	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:72)
 	at java.base/sun.nio.ch.FileChannelImpl.write(FileChannelImpl.java:300)
 	at PluginClassLoader for workflow-support//org.jenkinsci.plugins.workflow.support.pickles.serialization.RiverWriter$FileChannelOutput.write(RiverWriter.java:215)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.UTFUtils.writeUTFBytes(UTFUtils.java:131)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.writeKnownObject(RiverMarshaller.java:436)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.SimpleDataOutput.shallowFlush(SimpleDataOutput.java:353)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.writeKnownObject(RiverMarshaller.java:435)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:217)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.AbstractObjectOutput.writeObject(AbstractObjectOutput.java:58)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.AbstractMarshaller.writeObject(AbstractMarshaller.java:116)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.writeNewSerializableClass(RiverMarshaller.java:1561)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.writeSerializableClass(RiverMarshaller.java:1542)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:266)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.BlockMarshaller.doWriteObject(BlockMarshaller.java:65)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.BlockMarshaller.writeObject(BlockMarshaller.java:56)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.MarshallerObjectOutputStream.writeObjectOverride(MarshallerObjectOutputStream.java:50)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverObjectOutputStream.writeObjectOverride(RiverObjectOutputStream.java:179)
 	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:354)
-	at java.base/java.util.CollSer.writeObject(ImmutableCollections.java:1472)
+	at java.base/java.util.TreeMap.writeObject(TreeMap.java:2792)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.reflect.SerMethods.callWriteObject(SerMethods.java:69)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.reflect.SerializableClass.callWriteObject(SerializableClass.java:231)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1128)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.writeKnownObject(RiverMarshaller.java:735)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:217)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
@@ -472,9 +697,11 @@ Caused: java.io.IOException: No space left on device
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
@@ -484,19 +711,45 @@ Caused: java.io.IOException: No space left on device
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.BlockMarshaller.doWriteObject(BlockMarshaller.java:65)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.BlockMarshaller.writeObject(BlockMarshaller.java:56)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.MarshallerObjectOutputStream.writeObjectOverride(MarshallerObjectOutputStream.java:50)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverObjectOutputStream.writeObjectOverride(RiverObjectOutputStream.java:179)
-	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:354)
-	at java.base/java.util.HashMap.internalWriteEntries(HashMap.java:1952)
-	at java.base/java.util.HashMap.writeObject(HashMap.java:1505)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.reflect.SerMethods.callWriteObject(SerMethods.java:69)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.reflect.SerializableClass.callWriteObject(SerializableClass.java:231)
-	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1128)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
+	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1119)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteObject(RiverMarshaller.java:271)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteFields(RiverMarshaller.java:1182)
 	at PluginClassLoader for workflow-support//org.jboss.marshalling.river.RiverMarshaller.doWriteSerializableObject(RiverMarshaller.java:1140)
@@ -578,11 +831,11 @@ Caused: java.io.IOException: No space left on device
 	at PluginClassLoader for workflow-support//org.jenkinsci.plugins.workflow.support.pickles.serialization.RiverWriter.writeObject(RiverWriter.java:146)
 	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup.saveProgram(CpsThreadGroup.java:639)
 	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup.saveProgram(CpsThreadGroup.java:613)
-	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsStepContext$3.onSuccess(CpsStepContext.java:604)
-	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsStepContext$3.onSuccess(CpsStepContext.java:595)
-	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsFlowExecution$4$1.run(CpsFlowExecution.java:1060)
-	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsVmExecutorService.lambda$wrap$2(CpsVmExecutorService.java:81)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup.saveProgramIfPossible(CpsThreadGroup.java:596)
+	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup.run(CpsThreadGroup.java:520)
+	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup$2.call(CpsThreadGroup.java:372)
+	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsThreadGroup$2.call(CpsThreadGroup.java:302)
+	at PluginClassLoader for workflow-cps//org.jenkinsci.plugins.workflow.cps.CpsVmExecutorService.lambda$wrap$4(CpsVmExecutorService.java:143)
 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
 	at hudson.remoting.SingleLaneExecutorService$1.run(SingleLaneExecutorService.java:139)
 	at jenkins.util.ContextResettingExecutorService.lambda$wrap$0(ContextResettingExecutorService.java:26)
