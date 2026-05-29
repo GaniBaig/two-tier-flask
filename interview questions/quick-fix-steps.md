@@ -41,6 +41,7 @@ podman-compose logs -f
 ```
 
 **Wait for these messages:**
+
 - MySQL: `ready for connections`
 - Flask: `Running on http://0.0.0.0:5001`
 
@@ -54,6 +55,7 @@ podman ps
 ```
 
 **You should see BOTH:**
+
 ```
 CONTAINER ID  IMAGE         COMMAND   CREATED     STATUS                 PORTS           NAMES
 xxxxx         mysql:latest  mysqld    X min ago   Up X min (healthy)    3306/tcp        mysql
@@ -89,6 +91,7 @@ open http://localhost:5001
 ## 🎉 Success!
 
 If you see:
+
 - ✅ Both containers running in `podman ps`
 - ✅ Health endpoint returns `{"status":"healthy"}`
 - ✅ Web page loads in browser
@@ -116,6 +119,7 @@ podman-compose logs
 ### Common Issues
 
 **Issue 1: Container still not running**
+
 ```bash
 # Check if it's stopped
 podman ps -a
@@ -125,6 +129,7 @@ podman logs two-tier-app
 ```
 
 **Issue 2: Port 5001 still in use**
+
 ```bash
 # Check what's using port 5001
 lsof -i :5001
@@ -134,6 +139,7 @@ lsof -ti :5001 | xargs kill -9
 ```
 
 **Issue 3: curl not installed in container**
+
 ```bash
 # Check Dockerfile has curl
 grep curl Dockerfile
@@ -186,11 +192,13 @@ echo "   http://localhost:5001"
 ## 🔍 What Changed in Your Files
 
 ### app.py
+
 - ✅ Removed duplicate `/health` endpoint
 - ✅ Kept port 5001
 - ✅ Single health endpoint definition
 
 ### docker-compose.yml
+
 - ✅ Already configured for port 5001
 - ✅ Healthcheck points to port 5001
 - ✅ No changes needed
@@ -200,16 +208,19 @@ echo "   http://localhost:5001"
 ## 💡 Why It Failed Before
 
 **The Error:**
+
 ```
 AssertionError: View function mapping is overwriting an existing endpoint function: health
 ```
 
 **What It Means:**
+
 - You defined the same route (`/health`) twice
 - Flask doesn't allow duplicate route definitions
 - The app crashed on startup
 
 **The Fix:**
+
 - Removed the duplicate definition
 - Now only one `/health` endpoint exists
 - Flask starts successfully
@@ -228,13 +239,13 @@ AssertionError: View function mapping is overwriting an existing endpoint functi
 
 ## ✅ Final Checklist
 
-- [ ] Stopped old containers (`podman-compose down`)
-- [ ] Rebuilt Flask image (`podman-compose build --no-cache flask-app`)
-- [ ] Started containers (`podman-compose up -d`)
-- [ ] Both containers running (`podman ps` shows mysql AND two-tier-app)
-- [ ] Health check passes (`curl http://localhost:5001/health`)
-- [ ] Web page loads (`http://localhost:5001` in browser)
-- [ ] Can submit messages
+- [ ]  Stopped old containers (`podman-compose down`)
+- [ ]  Rebuilt Flask image (`podman-compose build --no-cache flask-app`)
+- [ ]  Started containers (`podman-compose up -d`)
+- [ ]  Both containers running (`podman ps` shows mysql AND two-tier-app)
+- [ ]  Health check passes (`curl http://localhost:5001/health`)
+- [ ]  Web page loads (`http://localhost:5001` in browser)
+- [ ]  Can submit messages
 
 ---
 

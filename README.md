@@ -340,6 +340,8 @@ The CI/CD pipeline is now fully operational. Jenkins is configured to use **Poll
 
 <img src="diagrams/Infrastructure.png">
 
+<img src="diagrams/network_workflow.png">
+
 ### **10. Work flow Diagram**
 
 <img src="diagrams/project_workflow.png">
